@@ -1,0 +1,14 @@
+#!/bin/bash
+sudo su
+cd /tmp/
+cat > AnyDesk-OpenSUSE.repo << "EOF"
+[anydesk]
+name=AnyDesk OpenSUSE - stable
+baseurl=http://rpm.anydesk.com/opensuse/$basearch/
+gpgcheck=1
+repo_gpgcheck=1
+gpgkey=https://keys.anydesk.com/repos/RPM-GPG-KEY
+EOF
+zypper addrepo --repo AnyDesk-OpenSUSE.repo
+zypper install anydesk
+anydesk
