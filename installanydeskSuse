@@ -1,6 +1,14 @@
 #!/bin/bash
-sudo su
+
+# Поднятие привилегий до root и проверка, что команда выполнена успешно
+if [ "$EUID" -ne 0 ]; then
+  echo "Пожалуйста, запустите скрипт с правами суперпользователя."
+  exit 1
+fi
+
 cd /tmp/
+
+# Создание репозитория для AnyDesk
 cat > AnyDesk-OpenSUSE.repo << "EOF"
 [anydesk]
 name=AnyDesk OpenSUSE - stable
@@ -9,6 +17,11 @@ gpgcheck=1
 repo_gpgcheck=1
 gpgkey=https://keys.anydesk.com/repos/RPM-GPG-KEY
 EOF
-zypper addrepo --repo AnyDesk-OpenSUSE.repo
-zypper install anydesk
-anydesk
+
+# Добавление репозитория и установка AnyDesk
+zypper addrepo AnyDesk-OpenSUSE.repo
+zypper refresh  # Обновление списка пакетов
+zypper install -y anydesk  # Флаг -y для автоматического подтверждения установки
+
+# Запуск AnyDesk
+anydesk &
